@@ -17,6 +17,13 @@ env.d.ts
 db.ts
 server_test.ts
 
+# Client-side
+App.css
+App.tsx
+index.css
+index.html
+main.tsx
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
