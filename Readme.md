@@ -1,4 +1,5 @@
 > Press Cmd+Shift+V to preview markdown
+> Get new Access Token https://github.com/settings/tokens/new
 
 #### Run Vite Dev server
 - Run: ` npm run dev `
