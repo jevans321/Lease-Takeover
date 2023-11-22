@@ -10,12 +10,12 @@ export interface Bookmark {
 
 export async function createBookmark(bookmark: Bookmark) {
   const { userId, listingId } = bookmark;
-
-  const result = await pool.query(
-    'INSERT INTO bookmarks (user_id, listing_id) VALUES ($1, $2)',
-    [userId, listingId]
-  );
-
+  const result = await prisma.bookmark.create({
+    data: {
+      userId: userId,
+      listingId: listingId,
+    },
+  });
   return result;
 }
 
