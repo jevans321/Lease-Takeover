@@ -37,10 +37,10 @@ export const handleGetBookmarks = [
     if (typeof token === "string") {
       response.status(500).send('Token is invalid');
     } else {
-      const user_id = token.user.id; // get user id from the authenticated user
+      const userId = token.user.id; // get user id from the authenticated user
       try {
-        const result = await getBookmarks(user_id);
-        response.status(200).json(result.rows);
+        const result = await getBookmarks(userId);
+        response.status(200).json(result);
       } catch (error) {
         response.status(500).json({ error });
       }

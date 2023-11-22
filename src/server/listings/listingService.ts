@@ -1,32 +1,68 @@
 // listings/listingService.ts
 // Handle business logic related to listings
-import { pool } from '../db';
+import { prisma } from '../db/client.ts';
 
 export interface Listing {
-  title: string;
+  authorId: number;
   description: string;
   location: string;
-  price: number;
-  user_id: number;
+  published: boolean;
+  rent: number;
+  title: string;
 }
 
 export async function createListing(listing: Listing) {
-  const { title, description, location, price, user_id } = listing;
-
-  const result = await pool.query(
-    'INSERT INTO listings (title, description, location, price, user_id) VALUES ($1, $2, $3, $4, $5)',
-    [title, description, location, price, user_id]
-  );
-
-  return result;
+  const { authorId, description, location, published, rent, title } = listing;
+  try {
+    // TODO: Add image upload functionality here, store the image in S3, and get the URL
+    const imageUrl = ''; // Placeholder for the S3 image URL after upload
+    const result = await prisma.listing.create({
+      data: {
+        authorId,
+        description,
+        imageUrl, // Updated to use the imageUrl from S3
+        location,
+        published,
+        rent,
+        title
+      }
+    });
+    return result;
+  } catch (error) {
+    console.error(error);
+    throw new Error('Error creating listing');
+  }
 }
 
-export async function getListings() {
-  const result = await pool.query('SELECT * FROM listings');
-  return result;
+export async function getListings(page: number, pageSize: number) {
+  try {
+    // Calculate the starting point for the listings
+    const skip = (page - 1) * pageSize;
+    const result = await prisma.listing.findMany({
+      skip: skip,
+      take: pageSize,
+      // Optionally, you can add orderBy here for sorting
+    });
+    return result;
+  } catch (error) {
+    console.error(error);
+    throw new Error('Error fetching listings');
+  }
 }
 
-export async function getListingById(listing_id: number) {
-  const result = await pool.query('SELECT * FROM listings WHERE id = $1', [listing_id]);
-  return result;
+export async function getListingById(listingId: number) {
+  try {
+    const result = await prisma.listing.findUnique({
+      where: {
+        id: listingId
+      }
+    });
+    if (result == null) {
+      throw new Error('Listing not found');
+    }
+    return result;
+  } catch (error) {
+    console.error(error);
+    throw new Error('Error fetching listing by ID');
+  }
 }

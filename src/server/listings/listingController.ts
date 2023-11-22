@@ -10,7 +10,7 @@ export const handleCreateListing = [
   ...validateListing,
   async (request: Request, response: Response) => {
     const listing: Listing = request.body;
-    listing.user_id = (request as any).user.id; // get user id from the authenticated user
+    listing.authorId = (request as any).user.id; // get user id from the authenticated user
 
     try {
       const result = await createListing(listing);
@@ -25,8 +25,8 @@ export const handleCreateListing = [
 export const handleGetListings = [
   async (_: Request, response: Response) => {
     try {
-      const result = await getListings();
-      response.status(200).json(result.rows);
+      const result = await getListings(1, 10); // Get the first 10 listings
+      response.status(200).json(result);
     } catch (error) {
       response.status(500).json({ error });
     }
@@ -42,11 +42,11 @@ export const handleGetListingById = [
 
     try {
       const result = await getListingById(listing_id);
-      if (result.rows.length === 0) {
+      if (result == null) {
         return response.status(404).json({ error: "Listing not found" });
       }
 
-      response.status(200).json(result.rows[0]);
+      response.status(200).json(result);
     } catch (error) {
       response.status(500).json({ error });
     }

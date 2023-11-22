@@ -30,7 +30,7 @@ export const handleLoginUser = [
     try {
       const userInDb = await loginUser(user);
 
-      const accessToken = jwt.sign({ _id: userInDb._id?.toString(), email: userInDb.email }, JWT_SECRET, { expiresIn: "20m" });
+      const accessToken = jwt.sign({ _id: userInDb.id?.toString(), email: userInDb.email }, JWT_SECRET, { expiresIn: "20m" });
       // response should send cookie back to clients browser. Client should automatically set cookie in browser
       response.cookie("token", accessToken, { httpOnly: true });
       response.json({ accessToken });

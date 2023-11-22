@@ -25,7 +25,7 @@ model User {
   email     String     @unique
   firstName String?
   lastName  String?
-  password  String?
+  password  String
   bookmarks Bookmark[]
   listings  Listing[]
 }
@@ -39,6 +39,7 @@ model Listing {
   imageUrl    String?
   location    String?
   published   Boolean    @default(false)
+  rent        Float
   title       String?
   bookmarks   Bookmark[]
 }
