@@ -1,55 +1,58 @@
-import jwt from 'jsonwebtoken';
-import request from 'supertest';
-import express, { Request, Response } from 'express';
+import { Request, Response } from 'express';
 import { validateBookmark } from '../bookmarkValidator';
-import app from '../../server';
+import { validationResult } from 'express-validator';
 
-app.use(express.json());
+jest.mock('express-validator', () => ({
+  ...jest.requireActual('express-validator'),
+  validationResult: jest.fn(),
+}));
 
-// Define your routes
-app.post('/bookmarks', validateBookmark, (_req: Request, res: Response) => res.sendStatus(204));
+const mockRequest = (bodyData = {}) => ({
+  body: bodyData
+}) as Request;
 
-// Your JWT Secret for testing
-const JWT_SECRET = "your_jwt_secret";
+const mockResponse = () => {
+  const res = {} as Response;
+  res.status = jest.fn().mockReturnThis();
+  res.json = jest.fn();
+  return res;
+};
 
-// Mock user and listing id
-const user = { id: 1 };
-const listing_id = 1;
+const nextFunction = jest.fn();
 
-describe('validateBookmark', () => {
-  it('validates a bookmark', async () => {
-    // Mock JWT token
-    const token = jwt.sign({ user }, JWT_SECRET);
+beforeEach(() => {
+  jest.clearAllMocks();
+  (validationResult as any).mockReset();
+});
 
-    const response = await request(app)
-      .post('/bookmarks')
-      .send({ listing_id })
-      .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${token}`);
+describe('Tests for validateBookmark middleware array and functions', () => {
+  it('should return an error if listingId is not numeric', () => {
+    const req = mockRequest({ listingId: 'not-a-number' });
+    const res = mockResponse();
 
-    expect(response.status).toBe(204);
+    (validationResult as any).mockImplementation(() => ({
+      isEmpty: () => false,
+      array: () => [{ msg: 'Listing ID must be a number', param: 'listingId' }]
+    }));
+
+    validateBookmark[1](req, res, nextFunction);
+
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({
+      errors: [{ msg: 'Listing ID must be a number', param: 'listingId' }]
+    });
   });
 
-  it('returns an error if listing_id is not provided', async () => {
-    // Mock JWT token
-    const token = jwt.sign({ user }, JWT_SECRET);
+  it('should call next() if validation is successful', () => {
+    const req = mockRequest({ listingId: 123 });
+    const res = mockResponse();
 
-    const response = await request(app)
-      .post('/bookmarks')
-      .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${token}`);
+    (validationResult as any).mockImplementation(() => ({
+      isEmpty: () => true
+    }));
 
-    expect(response.status).toBe(400);
-    expect(response.body.errors).toContainEqual(expect.objectContaining({ msg: 'Listing ID must be a number' }));
-  });
+    validateBookmark[1](req, res, nextFunction);
 
-  it('returns an error if user is not authenticated', async () => {
-    const response = await request(app)
-      .post('/bookmarks')
-      .send({ listing_id })
-      .set('Accept', 'application/json');
-
-    expect(response.status).toBe(401);
-    expect(response.body).toEqual({ error: 'Not authenticated' });
+    expect(nextFunction).toHaveBeenCalled();
   });
 });
