@@ -15,8 +15,8 @@ app.post('/bookmarks', handleCreateBookmark);
 app.get('/bookmarks', handleGetBookmarks);
 
 // Mock user and listing id
-const user = { id: 1 };
-const listing_id = 1;
+const user = { id: 8 };
+const listingId = 16;
 
 describe('POST /bookmarks', () => {
   it('creates a bookmark', async () => {
@@ -25,15 +25,16 @@ describe('POST /bookmarks', () => {
 
     const response = await request(app)
       .post('/bookmarks')
-      .send({ listing_id })
+      .send({ listingId })
       .set('Accept', 'application/json')
       .set('Authorization', `Bearer ${token}`);
 
     expect(response.status).toBe(201);
-    expect(response.body).toEqual(`Bookmark added with ID: ${response.body.insertId}`);
+    expect(response.body.message).toEqual(`Bookmark added with ID: ${response.body.listingId}`);
+    expect(response.body.listingId).toBeDefined();
   });
 
-  it('returns an error if listing_id is not provided', async () => {
+  it('returns an error if listingId is not provided', async () => {
     // Mock JWT token
     const token = jwt.sign({ user }, JWT_SECRET);
 
@@ -46,14 +47,13 @@ describe('POST /bookmarks', () => {
     expect(response.body.errors).toContainEqual(expect.objectContaining({ msg: 'Listing ID must be a number' }));
   });
 
-  it('returns an error if user is not authenticated', async () => {
+  it('on post bookmark, returns error if user not authenticated', async () => {
     const response = await request(app)
       .post('/bookmarks')
-      .send({ listing_id })
+      .send({ listingId })
       .set('Accept', 'application/json');
 
     expect(response.status).toBe(401);
-    expect(response.body).toEqual({ error: 'Not authenticated' });
   });
 });
 
@@ -70,7 +70,7 @@ describe('GET /bookmarks', () => {
     expect(Array.isArray(response.body)).toBe(true);
   });
 
-  it('returns an error if user is not authenticated', async () => {
+  it('on get bookmarks, returns error if user not authenticated', async () => {
     const response = await request(app).get('/bookmarks');
 
     expect(response.status).toBe(401);

@@ -1,7 +1,7 @@
 // listings/listingController.ts
 // Handle the request/response operations related to listings
 import { Request, Response } from 'express';
-import { authenticateJWT } from '../middleware';
+import { authenticateJWT } from '../middleware/middleware';
 import { createListing, Listing, getListings, getListingById } from './listingService';
 import { validateListing } from './listingValidator';
 

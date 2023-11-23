@@ -69,14 +69,35 @@ dotenv.config({ path: process.cwd() + '/.env' });
 #### JWT verify
 - Reference: https://github.com/auth0/node-jsonwebtoken/issues/757#issuecomment-1435836445
 
-#### Prisma Migrate
-- Create or Update the db tables defined in the schema.prisma file
-- maps your data model to the database schema
-  - `npx prisma migrate dev --name init`
-- install prisma client to enable query creation from your files
-  - `npm install @prisma/client`
-- Launch the db view UI in a browser window
-- Browse or edit table data through UI
-  - `npx prisma studio`
-- prefix table name with schema name
-  - `select * from public."Listing"`
+
+## Prisma
+##### Dependencies
+- run: `npm install @prisma/client`
+  - install prisma client to enable query creation from your files
+##### Migrate
+- run: `npx prisma migrate dev --name init`
+  - Create or Update the db tables defined in the schema.prisma file
+  - maps your data model to the database schema
+##### Seed
+- install tsx (if not installed): `npm install tsx`
+- in package.json add:
+```python
+# you can remove 'NODE_ENV=development' if it's declared already in .env file
+{
+  "scripts": {
+    "db-seed": "NODE_ENV=development prisma db seed"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  }
+}
+```
+- Then run
+  - `npm run db-seed`
+- Reference: https://github.com/prisma/prisma/discussions/20369#discussioncomment-7637038
+##### Database UI
+- run: `npx prisma studio`
+  - Launch the db view UI in a browser window
+  - Browse or edit table data through UI
+- Prefix table names: `select * from public."Listing"`
+  - prefix table name with prisma schema name from DATABASE_URL
