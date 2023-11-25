@@ -19,6 +19,45 @@ model Bookmark {
   @@id([userId, listingId])
 }
 
+model Match {
+  id        Int      @id @default(autoincrement())
+  listingId Int
+  userId    Int
+  listing   Listing  @relation(fields: [listingId], references: [id], name: "ListingMatches")
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  status    String // Indicates the status of the match (e.g., pending, accepted, declined)
+}
+
+model Listing {
+  id                Int        @id @default(autoincrement())
+  amenities         String[] // List of amenities like pool, gym, etc.
+  author            User       @relation(fields: [authorId], references: [id])
+  authorId          Int
+  bathrooms         Int? // Number of bathrooms
+  bedrooms          Int? // Number of bedrooms
+  bookmarks         Bookmark[]
+  city              String?
+  createdAt         DateTime   @default(now())
+  description       String?
+  furnished         Boolean    @default(false)
+  imageUrl          String?
+  leaseEnd          DateTime?
+  leaseStart        DateTime?
+  leaseType         String? // Indicates if it's a sublease, lease takeover, etc.
+  location          String?
+  matches           Match[]    @relation("ListingMatches")
+  petFriendly       Boolean    @default(false)
+  propertyType      String? // Apartment, house, studio, etc.
+  published         Boolean    @default(false)
+  rent              Float
+  state             String?
+  title             String?
+  updatedAt         DateTime?  @updatedAt
+  utilitiesIncluded Boolean    @default(false)
+  zipCode           String?
+}
+
 model User {
   id        Int        @id @default(autoincrement())
   createdAt DateTime   @default(now())
@@ -27,19 +66,6 @@ model User {
   lastName  String?
   password  String
   bookmarks Bookmark[]
+  match     Match[]
   listings  Listing[]
-}
-
-model Listing {
-  id          Int        @id @default(autoincrement())
-  author      User       @relation(fields: [authorId], references: [id])
-  authorId    Int
-  createdAt   DateTime   @default(now())
-  description String?
-  imageUrl    String?
-  location    String?
-  published   Boolean    @default(false)
-  rent        Float
-  title       String?
-  bookmarks   Bookmark[]
 }
