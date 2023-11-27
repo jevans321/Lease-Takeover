@@ -78,6 +78,11 @@ dotenv.config({ path: process.cwd() + '/.env' });
 - run: `npx prisma migrate dev --name init`
   - Create or Update the db tables defined in the schema.prisma file
   - maps your data model to the database schema
+- run: `npx prisma migrate reset`
+  - Drops the database/schema¹ if possible, or performs a soft reset if the environment does not allow deleting databases/schemas¹
+  - Creates a new database/schema¹ with the same name if the database/schema¹ was dropped
+  - Applies all migrations
+  - Runs seed scripts
 ##### Seed
 - install tsx (if not installed): `npm install tsx`
 - in package.json add:
@@ -95,6 +100,8 @@ dotenv.config({ path: process.cwd() + '/.env' });
 - Then run
   - `npm run db-seed`
 - Reference: https://github.com/prisma/prisma/discussions/20369#discussioncomment-7637038
+##### Command to Clear DB and Re-Seed
+- `npx prisma db push --force-reset && npm run db-seed`
 ##### Database UI
 - run: `npx prisma studio`
   - Launch the db view UI in a browser window

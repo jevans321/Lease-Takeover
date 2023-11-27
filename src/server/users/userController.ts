@@ -15,29 +15,32 @@ export const handleRegisterUser = [
       const result = await registerUser(user);
       response.status(201).send(`User added with ID: ${result.id}`);
     } catch (error) {
-      response.status(500).json({ error });
+      console.log(error)
+      if (error instanceof Error) {
+        response.status(500).json({ error: error.message });
+      } else {
+        response.status(500).json({ error: 'An unexpected error occurred' });
+      }
     }
   },
 ];
 
 export const handleLoginUser = [
   ...validateLoginUser,
-  async (request: Request, response: Response) => {
-    const user: User = request.body;
-
+  async (req: Request, res: Response) => {
+    const user: User = req.body;
     try {
       const userInDb = await loginUser(user);
-
+      if (!userInDb) {
+        return res.status(401).json({ message: 'Invalid credentials' });
+      }
       const accessToken = jwt.sign({ _id: userInDb.id?.toString(), email: userInDb.email }, JWT_SECRET, { expiresIn: "20m" });
-      // response should send cookie back to clients browser. Client should automatically set cookie in browser
-      response.cookie("token", accessToken, { httpOnly: true });
-      response.json({ accessToken });
-      response.status(200);
-
-      // redirect user to welcome, dashboard, or main page
+      res.cookie("token", accessToken, { httpOnly: true, secure: true, sameSite: 'strict' });
+      res.status(200).send("Login successful");
       // return response.redirect("/welcome");
     } catch (error) {
-      response.status(500).json({ error });
+      console.error('Login error:', error);
+      res.status(500).json({ message: "Error during login" });
     }
   },
 ];

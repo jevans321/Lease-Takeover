@@ -1,30 +1,34 @@
 // listings/listingService.ts
 // Handle business logic related to listings
+import { Listing } from '../utility/appTypes.ts'
 import { prisma } from '../db/client.ts';
 
-export interface Listing {
-  authorId: number;
-  description: string;
-  location: string;
-  published: boolean;
-  rent: number;
-  title: string;
-}
-
 export async function createListing(listing: Listing) {
-  const { authorId, description, location, published, rent, title } = listing;
   try {
     // TODO: Add image upload functionality here, store the image in S3, and get the URL
     const imageUrl = ''; // Placeholder for the S3 image URL after upload
     const result = await prisma.listing.create({
       data: {
-        authorId,
-        description,
+        amenities: listing.amenities,
+        authorId: listing.authorId,
+        bathrooms: listing.bathrooms,
+        bedrooms: listing.bedrooms,
+        city: listing.city,
+        description: listing.description,
+        furnished: listing.furnished,
         imageUrl, // Updated to use the imageUrl from S3
-        location,
-        published,
-        rent,
-        title
+        leaseEnd: listing.leaseEnd,
+        leaseStart: listing.leaseStart,
+        leaseType: listing.leaseType,
+        location: listing.location,
+        petFriendly: listing.petFriendly,
+        propertyType: listing.propertyType,
+        published: listing.published,
+        rent: listing.rent,
+        state: listing.state,
+        title: listing.title,
+        utilitiesIncluded: listing.utilitiesIncluded,
+        zipCode: listing.zipCode
       }
     });
     return result;
@@ -33,6 +37,7 @@ export async function createListing(listing: Listing) {
     throw new Error('Error creating listing');
   }
 }
+
 
 export async function getListings(page: number, pageSize: number) {
   try {

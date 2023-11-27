@@ -1,6 +1,6 @@
 import jwt, { VerifyErrors } from 'jsonwebtoken';
 import { NextFunction, Request, Response } from 'express';
-import { CustomJwtPayload, CustomRequest } from '../utility/customTypes';
+import { CustomJwtPayload, CustomRequest } from '../utility/appTypes';
 
 const JWT_SECRET = process.env.JWT_SECRET ?? '';
 

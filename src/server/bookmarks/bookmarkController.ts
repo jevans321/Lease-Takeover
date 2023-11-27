@@ -4,7 +4,7 @@ import { Request, Response } from 'express';
 import { authenticateJWT } from '../middleware/middleware';
 import { createBookmark, getBookmarks, Bookmark } from './bookmarkService';
 import { validateBookmark } from './bookmarkValidator';
-import { CustomRequest } from '../utility/customTypes';
+import { CustomRequest } from '../utility/appTypes';
 
 export const handleCreateBookmark = [
   authenticateJWT,

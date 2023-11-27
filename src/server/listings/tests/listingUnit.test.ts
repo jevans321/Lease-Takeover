@@ -61,6 +61,7 @@ describe('Tests for handleCreateListing middleware function', () => {
     const mockUserId = 1;
     const req = mockRequestCreate({ title: 'New Listing' }, { id: mockUserId });
     const res = mockResponse();
+    // This mock error will also console log the error
     const mockError = new Error('Database error');
     (createListing as jest.Mock).mockRejectedValue(mockError);
     await handleCreateListing[lastIdx](req, res, nextFunction);

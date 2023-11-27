@@ -1,7 +1,7 @@
 import jwt, { VerifyErrors } from 'jsonwebtoken';
 import { authenticateJWT } from '../middleware';
 import { Request, Response } from 'express';
-import { CustomRequest, CustomJwtPayload } from '../../utility/customTypes';
+import { CustomRequest, CustomJwtPayload } from '../../utility/appTypes';
 
 // Mock jsonwebtoken
 jest.mock('jsonwebtoken', () => ({

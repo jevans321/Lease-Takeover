@@ -4,7 +4,7 @@ import { Request, Response } from 'express';
 import { authenticateJWT } from '../middleware/middleware';
 import { createListing, getListings, getListingById } from './listingService';
 import { validateListing } from './listingValidator';
-import { CustomRequest } from '../utility/customTypes';
+import { CustomRequest } from '../utility/appTypes';
 
 export const handleCreateListing = [
   authenticateJWT,
