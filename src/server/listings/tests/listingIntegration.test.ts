@@ -3,7 +3,7 @@ import { execSync } from 'child_process';
 import jwt from 'jsonwebtoken';
 import request from 'supertest';
 
-describe('/listings', () => {
+describe('POST /listings', () => {
   beforeAll(() => {
     // Force reset the database and re-seed it
     execSync('npx prisma db push --force-reset && npm run db-seed');
@@ -55,3 +55,71 @@ describe('/listings', () => {
     expect(response.body).toHaveProperty('errors');
   });
 });
+
+describe('GET /listings', () => {
+  beforeAll(() => {
+    // Force reset the database and re-seed it
+    execSync('npx prisma db push --force-reset && npm run db-seed');
+  });
+  it('should retrieve listings with default pagination', async () => {
+    const response = await request(app).get('/listings');
+
+    expect(response.statusCode).toBe(200);
+    expect(Array.isArray(response.body)).toBeTruthy();
+    // Additional assertions based on the expected structure of listings
+  });
+
+  it('should handle pagination parameters correctly', async () => {
+    const page = 2;
+    const limit = 5;
+    const response = await request(app).get(`/listings?page=${page}&limit=${limit}`);
+    expect(response.statusCode).toBe(200);
+    expect(Array.isArray(response.body)).toBeTruthy();
+    // Check if the returned array length matches the 'limit' parameter
+    expect(response.body.length).toBeLessThanOrEqual(limit);
+  });
+
+  it('should handle invalid pagination parameters gracefully', async () => {
+    const response = await request(app).get('/listings?page=invalid&limit=invalid');
+    expect(response.statusCode).toBe(200);
+    expect(response.body.length).toBeLessThanOrEqual(10);
+  });
+
+  // Additional test to simulate and handle internal server error
+  it('should handle server errors', async () => {
+    // This test depends on your ability to simulate a server error, such as a database failure
+  });
+});
+
+describe('GET /listings/:id', () => {
+  beforeAll(() => {
+    // Force reset the database and re-seed it
+    execSync('npx prisma db push --force-reset && npm run db-seed');
+  });
+  it('should retrieve a specific listing for a valid ID', async () => {
+    const validListingId = 1; // Replace with an ID known to exist in your test database
+
+    const response = await request(app).get(`/listings/${validListingId}`);
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toHaveProperty('id', validListingId);
+    // Additional assertions based on the expected structure of the listing
+  });
+
+  it('should return 400 for invalid listing ID', async () => {
+    const response = await request(app).get('/listings/invalid');
+
+    expect(response.statusCode).toBe(400);
+    expect(response.body).toHaveProperty('message', 'Invalid listing ID');
+  });
+
+  it('should return 404 when the listing is not found', async () => {
+    const nonExistentListingId = 9999; // An ID that does not exist in your test database
+
+    const response = await request(app).get(`/listings/${nonExistentListingId}`);
+
+    expect(response.statusCode).toBe(500);
+    expect(response.body).toHaveProperty('message', 'Error fetching listing');
+  });
+});
+
