@@ -43,7 +43,8 @@
     "password-validator": "^5.3.0",
     "pg": "^8.11.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "validator": "^13.11.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
@@ -56,6 +57,7 @@
     "@types/react": "^18.0.37",
     "@types/react-dom": "^18.0.11",
     "@types/supertest": "^2.0.12",
+    "@types/validator": "^13.11.7",
     "@typescript-eslint/eslint-plugin": "^5.59.0",
     "@typescript-eslint/parser": "^5.59.0",
     "@vitejs/plugin-react-swc": "^3.0.0",
