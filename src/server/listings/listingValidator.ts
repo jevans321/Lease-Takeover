@@ -29,3 +29,23 @@ export const validateListing = [
   },
 ];
 
+export const validateSearchParameters = [
+  (request: Request, response: Response, next: NextFunction) => {
+    const { city, zipcode } = request.query;
+
+    // Check if 'city' is a non-empty string
+    if (city !== undefined && (typeof city !== 'string' || city.trim() === '')) {
+      return response.status(400).json({ message: 'Invalid city parameter' });
+    }
+
+    // Check if 'zipcode' is a non-empty string
+    if (zipcode !== undefined && (typeof zipcode !== 'string' || zipcode.trim() === '')) {
+      return response.status(400).json({ message: 'Invalid zipcode parameter' });
+    }
+
+    // Proceed to the next middleware if validation succeeds
+    next();
+  }
+]
+
+

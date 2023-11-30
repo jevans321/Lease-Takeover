@@ -71,3 +71,20 @@ export async function getListingById(listingId: number) {
     throw new Error('Error fetching listing by ID');
   }
 }
+
+export async function getListingsBySearchParameters(city: string | undefined, zipcode: string | undefined) {
+  try {
+    const result = await prisma.listing.findMany({
+      where: {
+        OR: [
+          { city: city },
+          { zipCode: zipcode }
+        ],
+      },
+    });
+    return result;
+  } catch (error) {
+    console.error('Error fetching listings:', error);
+    throw new Error('Error fetching listings');
+  }
+}

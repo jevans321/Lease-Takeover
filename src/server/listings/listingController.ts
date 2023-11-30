@@ -2,8 +2,8 @@
 // Handle the request/response operations related to listings
 import { Request, Response } from 'express';
 import { authenticateJWT } from '../middleware/middleware';
-import { createListing, getListings, getListingById } from './listingService';
-import { validateListing } from './listingValidator';
+import { createListing, getListings, getListingById, getListingsBySearchParameters } from './listingService';
+import { validateListing, validateSearchParameters } from './listingValidator';
 import { CustomRequest } from '../utility/appTypes';
 
 export const handleCreateListing = [
@@ -28,6 +28,23 @@ export const handleCreateListing = [
     }
   },
 ];
+
+export const handleGetSearchListings = [
+  ...validateSearchParameters,
+  async (request: Request, response: Response) => {
+    try {
+      const city = typeof request.query.city === 'string' ? request.query.city : undefined;
+      const zipcode = typeof request.query.zipcode === 'string' ? request.query.zipcode : undefined;
+      const result = await getListingsBySearchParameters(city, zipcode);
+      response.status(200).json(result);
+    } catch (error) {
+      console.error('Error fetching listings:', error);
+      response.status(500).json({ message: 'Error fetching listings' });
+    }
+  },
+];
+
+
 
 export const handleGetListings = [
   async (request: Request, response: Response) => {
