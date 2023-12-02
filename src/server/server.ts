@@ -1,7 +1,7 @@
 import cookieParser from "cookie-parser";
 import express from 'express';
 import { handleRegisterUser, handleLoginUser } from './users/userController';
-import { handleCreateListing, handleGetListings, handleGetListingById, handleGetSearchListings } from './listings/listingController';
+import { handleCreateListing, handleGetListings, handleGetListingById, handleGetListingsBySearchParameters } from './listings/listingController';
 import { handleCreateBookmark, handleGetBookmarks } from './bookmarks/bookmarkController';
 import * as dotenv from 'dotenv';
 
@@ -27,8 +27,8 @@ app.post('/bookmarks', handleCreateBookmark);
 // GET requests
 app.get('/bookmarks', handleGetBookmarks);
 app.get('/listings', handleGetListings);
+app.get('/listings/search', handleGetListingsBySearchParameters);
 app.get('/listings/:id', handleGetListingById);
-app.get('/listings/search', handleGetSearchListings);
 
 // More routes to be added later...
 

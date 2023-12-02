@@ -103,7 +103,7 @@ dotenv.config({ path: process.cwd() + '/.env' });
 ##### Command to Clear DB and Re-Seed
 - `npx prisma db push --force-reset && npm run db-seed`
 ##### Database UI
-- run: `npx prisma studio`
+- run: `npx prisma studio` [Make sure DB is running!]
   - Launch the db view UI in a browser window
   - Browse or edit table data through UI
 - Prefix table names: `select * from public."Listing"`

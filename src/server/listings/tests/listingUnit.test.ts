@@ -1,11 +1,22 @@
 import { Request, Response } from 'express';
-import { handleCreateListing, handleGetListingById, handleGetListings } from '../listingController';
-import { createListing, getListingById, getListings } from '../listingService'
+import {
+  handleCreateListing,
+  handleGetListingById,
+  handleGetListings,
+  handleGetListingsBySearchParameters
+} from '../listingController';
+import {
+  createListing,
+  getListingById,
+  getListings,
+  getListingsBySearchParameters
+} from '../listingService'
 
 jest.mock('../listingService', () => ({
   createListing: jest.fn(),
   getListingById: jest.fn(),
   getListings: jest.fn(),
+  getListingsBySearchParameters: jest.fn(),
 }));
 
 const mockRequestCreate = (bodyData = {}, userData: { id?: number } | null = {}) => ({
@@ -71,6 +82,7 @@ describe('Tests for handleCreateListing middleware function', () => {
   });
 
 });
+
 
 describe('Tests for handleGetListings middleware function', () => {
   const lastIdx = handleGetListings.length - 1;
@@ -153,4 +165,33 @@ describe('Tests for handleGetListingById middleware function', () => {
     expect(res.json).toHaveBeenCalledWith({ message: "Error fetching listing" });
   });
 
+});
+
+describe('Tests for handleGetListingsBySearchParameters Middleware', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('should successfully retrieve listings', async () => {
+    const req = mockRequestGet({ city: 'New York', zipcode: '10001' });
+    const res = mockResponse();
+    const mockedListings = [{ id: 1, name: 'Listing 1' }, { id: 2, name: 'Listing 2' }];
+    (getListingsBySearchParameters as jest.Mock).mockResolvedValue(mockedListings);
+    await handleGetListingsBySearchParameters[1](req, res, nextFunction);
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith(mockedListings);
+    expect(getListingsBySearchParameters).toHaveBeenCalledWith('New York', '10001');
+  });
+
+  it('should handle errors from the service function', async () => {
+    const req = mockRequestGet({ city: 'New York', zipcode: '10001' });
+    const res = mockResponse();
+    (getListingsBySearchParameters as jest.Mock).mockRejectedValue(new Error('Service Error'));
+    await handleGetListingsBySearchParameters[1](req, res, nextFunction);
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({ message: 'Error fetching listings' });
+  });
+
+  // Additional tests can include different combinations of query params
+  // and tests for validating the query parameters as per validateSearchParameters
 });

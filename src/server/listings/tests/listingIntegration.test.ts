@@ -63,7 +63,6 @@ describe('GET /listings', () => {
   });
   it('should retrieve listings with default pagination', async () => {
     const response = await request(app).get('/listings');
-
     expect(response.statusCode).toBe(200);
     expect(Array.isArray(response.body)).toBeTruthy();
     // Additional assertions based on the expected structure of listings
@@ -91,6 +90,7 @@ describe('GET /listings', () => {
   });
 });
 
+
 describe('GET /listings/:id', () => {
   beforeAll(() => {
     // Force reset the database and re-seed it
@@ -98,9 +98,7 @@ describe('GET /listings/:id', () => {
   });
   it('should retrieve a specific listing for a valid ID', async () => {
     const validListingId = 1; // Replace with an ID known to exist in your test database
-
     const response = await request(app).get(`/listings/${validListingId}`);
-
     expect(response.statusCode).toBe(200);
     expect(response.body).toHaveProperty('id', validListingId);
     // Additional assertions based on the expected structure of the listing
@@ -108,18 +106,56 @@ describe('GET /listings/:id', () => {
 
   it('should return 400 for invalid listing ID', async () => {
     const response = await request(app).get('/listings/invalid');
-
     expect(response.statusCode).toBe(400);
     expect(response.body).toHaveProperty('message', 'Invalid listing ID');
   });
 
   it('should return 404 when the listing is not found', async () => {
     const nonExistentListingId = 9999; // An ID that does not exist in your test database
-
     const response = await request(app).get(`/listings/${nonExistentListingId}`);
-
     expect(response.statusCode).toBe(500);
     expect(response.body).toHaveProperty('message', 'Error fetching listing');
+  });
+});
+
+
+describe('GET /listings/search Endpoint', () => {
+  beforeAll(() => {
+    // Force reset the database and re-seed it
+    execSync('npx prisma db push --force-reset && npm run db-seed');
+  });
+  it('should fetch listings for a valid city', async () => {
+    const response = await request(app).get('/listings/search').query({ city: 'Austin' });
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toBeInstanceOf(Array);
+    // Further assertions can be made based on the expected structure of your listings
+  });
+
+  it('should fetch listings for a valid zipcode', async () => {
+    const response = await request(app).get('/listings/search').query({ zipcode: '78704' });
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toBeInstanceOf(Array);
+  });
+
+  it('should return 400 for invalid city format', async () => {
+    const response = await request(app).get('/listings/search').query({ city: '123' });
+
+    expect(response.statusCode).toBe(400);
+    expect(response.body).toHaveProperty('message', 'Invalid city parameter');
+  });
+
+  it('should return 400 for invalid zipcode format', async () => {
+    const response = await request(app).get('/listings/search').query({ zipcode: 'ABCDE' });
+    expect(response.statusCode).toBe(400);
+    expect(response.body).toHaveProperty('message', 'Invalid zipcode parameter');
+  });
+
+  it('should handle requests with empty query parameters', async () => {
+    const response = await request(app).get('/listings/search');
+    expect(response.statusCode).toBe(200);
+    // this should return an empty array
+    expect(response.body).toBeInstanceOf(Array);
   });
 });
 

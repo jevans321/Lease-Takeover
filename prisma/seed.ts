@@ -25,16 +25,20 @@ async function main() {
       data: [
         {
           authorId: user.id,
+          city: "Austin",
           rent: 1000.0,
           published: false,
           title: "My Listing Title",
+          zipCode: "78704",
           // ...other fields for the listing
         },
         {
           authorId: user.id,
+          city: "Seattle",
           rent: 1500.0,
           published: true,
           title: "My Listing Title Two",
+          zipCode: "55401",
           // ...other fields for the listing
         },
         // ...add more listings as needed for each user
