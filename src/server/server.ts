@@ -1,4 +1,5 @@
-import cookieParser from "cookie-parser";
+import cookieParser from 'cookie-parser';
+import cors from 'cors';
 import express from 'express';
 import { handleRegisterUser, handleLoginUser } from './users/userController';
 import { handleCreateListing, handleGetListings, handleGetListingById, handleGetListingsBySearchParameters } from './listings/listingController';
@@ -17,6 +18,12 @@ app.use(express.json());
 
 //middleware for cookies
 app.use(cookieParser());
+
+// Added CORS to to allow requests from frontend domain and port
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true,
+}));
 
 // POST requests
 app.post('/users/register', handleRegisterUser);
