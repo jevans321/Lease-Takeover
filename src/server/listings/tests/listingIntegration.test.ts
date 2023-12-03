@@ -157,5 +157,11 @@ describe('GET /listings/search Endpoint', () => {
     // this should return an empty array
     expect(response.body).toBeInstanceOf(Array);
   });
+
+  it('should correctly handle requests with both city and zipcode', async () => {
+    const response = await request(app).get('/listings/search').query({ city: 'Austin', zipcode: '78704' });
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toBeInstanceOf(Array);
+  });
 });
 
