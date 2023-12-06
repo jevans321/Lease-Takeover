@@ -4,12 +4,12 @@ const prisma = new PrismaClient();
 
 async function main() {
   const usersData = [
-    { email: 'alice@example.com', firstName: 'Alice', lastName: 'White', password: 'password1' },
-    { email: 'bob@example.com', firstName: 'Bob', lastName: 'Hill', password: 'password2' },
-    { email: 'tito@example.com', firstName: 'Tito', lastName: 'Keen', password: 'password3' },
-    { email: 'fox@example.com', firstName: 'Fox', lastName: 'Adin', password: 'password4' },
-    { email: 'sky@example.com', firstName: 'Sky', lastName: 'Fall', password: 'password5' },
-    { email: 'lin@example.com', firstName: 'Lin', lastName: 'Tenson', password: 'password6' },
+    { email: 'alice@example.com', firstName: 'Alice', lastName: 'White', password: 'A1b2c3d!' },
+    { email: 'bob@example.com', firstName: 'Bob', lastName: 'Hill', password: 'R4nDoM$5' },
+    { email: 'tito@example.com', firstName: 'Tito', lastName: 'Keen', password: 'Pass!w0rd' },
+    { email: 'fox@example.com', firstName: 'Fox', lastName: 'Adin', password: 'T3st@123' },
+    { email: 'sky@example.com', firstName: 'Sky', lastName: 'Fall', password: 'Val!d8Pw' },
+    { email: 'lin@example.com', firstName: 'Lin', lastName: 'Tenson', password: 'Qwerty@7' },
     // ...add more users as needed
   ];
 
