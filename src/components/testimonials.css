@@ -1,0 +1,42 @@
+.testimonials {
+  text-align: center;
+  padding: 40px 20px;
+  background-color: #fff;
+}
+
+.testimonials-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.testimonial {
+  width: 300px;
+  /* Fixed width for each testimonial */
+  padding: 20px;
+  background-color: #f5f5f5;
+  /* Light background for each testimonial */
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.testimonial-review {
+  font-style: italic;
+  color: #666;
+}
+
+.testimonial-rating {
+  color: #FFD700;
+  /* Gold color for star ratings */
+}
+
+.testimonial-author {
+  font-weight: bold;
+  color: #333;
+}
+
+.testimonial-author span {
+  font-weight: normal;
+  color: #666;
+}

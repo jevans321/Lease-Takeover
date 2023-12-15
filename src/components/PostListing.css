@@ -1,0 +1,126 @@
+.post-listing-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.post-listing-container h2 {
+  margin-bottom: 20px;
+}
+
+.post-listing-container form input,
+.post-listing-container form button {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.post-listing-container form button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.post-listing-container form button:hover {
+  background-color: #45a049;
+}
+
+.message {
+  margin: 10px 0;
+  padding: 10px;
+  color: #ffffff;
+}
+
+.input-group {
+  position: relative;
+  margin-bottom: 1rem;
+  /* Space for error message */
+}
+
+.success {
+  background-color: #4CAF50;
+}
+
+.error {
+  background-color: #f44336;
+}
+
+.error-input {
+  border-color: #f44336;
+}
+
+.error-message {
+  color: #d32f2f;
+  /* Error color */
+  position: absolute;
+  bottom: -20px;
+  /* Position just below the input */
+  left: 0;
+  font-size: 0.8rem;
+  /* Smaller font size for error message */
+  width: 100%;
+  text-align: left;
+}
+
+.error-message-password {
+  list-style-type: disc;
+  list-style-position: inside;
+  text-align: left;
+  padding-left: 0;
+  margin-top: 0.5rem;
+  font-size: 0.8rem;
+  color: #f44336;
+}
+
+.error-message-password li {
+  margin-bottom: 0.25rem;
+}
+
+.submit-button,
+.toggle-mode-button {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 0.25rem;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  text-align: center;
+  display: inline-block;
+  margin: 0.5rem 0;
+  text-decoration: none;
+  /* Remove underline from any <a> elements */
+}
+
+.submit-button {
+  background-color: #4CAF50;
+  /* Primary action color */
+  color: #ffffff;
+}
+
+.submit-button:hover,
+.submit-button:focus {
+  background-color: #45a049;
+  /* A shade darker for hover state */
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+  /* Slight shadow for depth */
+}
+
+.toggle-mode-button {
+  background-color: transparent;
+  color: #4CAF50;
+  /* Same as the submit button for consistency */
+  border: 1px solid #4CAF50;
+  /* Add a border for the secondary button */
+}
+
+.toggle-mode-button:hover,
+.toggle-mode-button:focus {
+  background-color: #4CAF50;
+  /* Fill color on hover for secondary action */
+  color: #ffffff;
+}

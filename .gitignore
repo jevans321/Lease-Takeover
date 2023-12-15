@@ -18,6 +18,8 @@ db.ts
 server_test.ts
 
 # Client-side
+_v1_files/
+assets/
 App.css
 App.tsx
 index.css

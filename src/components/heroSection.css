@@ -1,0 +1,83 @@
+.hero-section {
+  position: relative;
+  width: 100%;
+}
+
+.slide {
+  position: relative;
+}
+
+.slide img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.slide-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  /* or any color that suits your design */
+  text-align: center;
+}
+
+.hero-search {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  /* Consider adding a background or border if the search overlaps with the slide content for better visibility */
+  background: rgba(255, 255, 255, 0.5);
+  /* Example for better visibility */
+  padding: 10px;
+  border-radius: 5px;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+
+  /* Styles for tablets and small desktops */
+  .navigation ul {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+
+  /* Styles for large phones to tablet */
+  .header,
+  .navigation ul {
+    flex-direction: column;
+  }
+
+  .search-bar input,
+  .search-bar button {
+    width: 100%;
+  }
+
+  .hero-section,
+  .featured-listings,
+  .how-it-works,
+  .testimonials,
+  .footer {
+    padding: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+
+  /* Styles for small phones */
+  .navigation ul {
+    display: none;
+    /* Consider a hamburger menu for small devices */
+  }
+
+  .section {
+    padding: 5px;
+  }
+
+  /* Further reduce font sizes, padding, and margins as needed */
+}
