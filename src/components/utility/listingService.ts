@@ -5,7 +5,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 interface ListingSearchParams {
   location: string;
   propertyType: string;
-  keyword: string;
+  bedrooms: string;
 }
 
 interface Listing {
@@ -17,7 +17,7 @@ interface Listing {
 
 export const fetchListings = async (searchParams: ListingSearchParams): Promise<Listing[]> => {
   try {
-    const response: AxiosResponse<Listing[]> = await axios.get(`${API_BASE_URL}/search`, { params: searchParams });
+    const response: AxiosResponse<Listing[]> = await axios.get(`${API_BASE_URL}/listings/search`, { params: searchParams });
     return response.data;
   } catch (error) {
     // You can throw a typed custom error if needed

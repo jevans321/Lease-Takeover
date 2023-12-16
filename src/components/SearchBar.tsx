@@ -6,13 +6,11 @@ import './searchBar.css';
 interface SearchParams {
   location: string;
   propertyType: string;
-  keyword: string;
+  bedrooms: string;
 }
 
 function SearchBar() {
-  const [searchTerm, setSearchTerm] = useState('');
-  // Initialize state for each search criterion
-  const [keyword, setKeyword] = useState('');
+  const [bedrooms, setBedrooms] = useState('');
   const [location, setLocation] = useState('');
   const [propertyType, setPropertyType] = useState('');
   const [searchError, setSearchError] = useState('');
@@ -24,11 +22,11 @@ function SearchBar() {
     const searchParams: SearchParams = {
       location: DOMPurify.sanitize(location),
       propertyType: DOMPurify.sanitize(propertyType),
-      keyword: DOMPurify.sanitize(keyword),
+      bedrooms: bedrooms === 'any' ? '' : DOMPurify.sanitize(bedrooms),
     };
 
     // Validate inputs
-    if (!searchParams.location && !searchParams.propertyType && !searchParams.keyword) {
+    if (!searchParams.location && !searchParams.propertyType && !searchParams.bedrooms) {
       setSearchError('Please enter some search criteria.');
       return;
     }
@@ -49,7 +47,7 @@ function SearchBar() {
     <form onSubmit={handleSearch} className="search-bar">
       <input
         type="text"
-        placeholder="City, neighborhood, or ZIP"
+        placeholder="City or ZIP"
         value={location}
         onChange={(e) => setLocation(e.target.value)}
       />
@@ -57,18 +55,24 @@ function SearchBar() {
         value={propertyType}
         onChange={(e) => setPropertyType(e.target.value)}
       >
-        <option value="">Select Property Type</option>
+        <option value="" disabled>Type</option>
         <option value="apartment">Apartment</option>
         <option value="house">House</option>
         <option value="condo">Condo</option>
         {/* Add other property types as options here */}
       </select>
-      <input
-        type="text"
-        placeholder="Keyword (e.g., pool)"
-        value={keyword}
-        onChange={(e) => setKeyword(e.target.value)}
-      />
+      <select
+        value={bedrooms}
+        onChange={(e) => setBedrooms(e.target.value)}
+      >
+        <option value="" disabled>Beds</option>
+        <option value="any">Any</option>
+        <option value="studio">Studio</option>
+        <option value="1">1 Bedroom</option>
+        <option value="2">2 Bedrooms</option>
+        <option value="3">3 Bedrooms</option>
+        <option value="4+">4+ Bedrooms</option>
+      </select>
       <button type="submit">Search</button>
       {searchError && <div className="search-error">{searchError}</div>}
     </form>
