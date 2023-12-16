@@ -65,6 +65,7 @@ model User {
   firstName String?
   lastName  String?
   password  String
+  userType  String
   bookmarks Bookmark[]
   match     Match[]
   listings  Listing[]

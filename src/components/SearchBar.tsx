@@ -59,7 +59,6 @@ function SearchBar() {
         <option value="apartment">Apartment</option>
         <option value="house">House</option>
         <option value="condo">Condo</option>
-        {/* Add other property types as options here */}
       </select>
       <select
         value={bedrooms}

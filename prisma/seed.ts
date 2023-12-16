@@ -4,12 +4,12 @@ const prisma = new PrismaClient();
 
 async function main() {
   const usersData = [
-    { email: 'alice@example.com', firstName: 'Alice', lastName: 'White', password: 'A1b2c3d!' },
-    { email: 'bob@example.com', firstName: 'Bob', lastName: 'Hill', password: 'R4nDoM$5' },
-    { email: 'tito@example.com', firstName: 'Tito', lastName: 'Keen', password: 'Pass!w0rd' },
-    { email: 'fox@example.com', firstName: 'Fox', lastName: 'Adin', password: 'T3st@123' },
-    { email: 'sky@example.com', firstName: 'Sky', lastName: 'Fall', password: 'Val!d8Pw' },
-    { email: 'lin@example.com', firstName: 'Lin', lastName: 'Tenson', password: 'Qwerty@7' },
+    { email: 'alice@example.com', firstName: 'Alice', lastName: 'White', password: 'A1b2c3d!', userType: 'Lister' },
+    { email: 'bob@example.com', firstName: 'Bob', lastName: 'Hill', password: 'R4nDoM$5', userType: 'Lister' },
+    { email: 'tito@example.com', firstName: 'Tito', lastName: 'Keen', password: 'Pass!w0rd', userType: 'Lister' },
+    { email: 'fox@example.com', firstName: 'Fox', lastName: 'Adin', password: 'T3st@123', userType: 'Lister' },
+    { email: 'sky@example.com', firstName: 'Sky', lastName: 'Fall', password: 'Val!d8Pw', userType: 'Lister' },
+    { email: 'lin@example.com', firstName: 'Lin', lastName: 'Tenson', password: 'Qwerty@7', userType: 'Lister' },
     // ...add more users as needed
   ];
 
