@@ -1,0 +1,62 @@
+.location-typeahead-container {
+  display: inline-block;
+  vertical-align: middle;
+  /* Aligns vertically with inline or inline-block elements */
+}
+
+.location-typeahead-container input {
+  height: 16px;
+  /* Match the height with other navbar inputs or buttons */
+  padding: 8px 12px;
+  /* Adjust padding as necessary */
+  font-size: 16px;
+  /* Match the font size with other inputs */
+  border: 1px solid #ddd;
+  /* Border to match other navbar elements */
+  border-radius: 4px;
+  /* Consistent border-radius with other elements */
+  margin-right: 8px;
+  /* Space after the typeahead input, adjust as needed */
+}
+
+/* Styles for the suggestions dropdown */
+.location-typeahead-container .suggestions-list {
+  list-style: none;
+  margin: 0;
+  margin-top: 1px;
+  /* Align with the bottom of the input field */
+  padding: 0;
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-top: none;
+  /* Seamless connection with the input field */
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-height: 300px;
+  overflow-y: auto;
+  width: 180px;
+  /* Adjust the width to account for borders */
+  z-index: 1000;
+}
+
+.location-typeahead-container .suggestions-list li {
+  padding: 10px 15px;
+  cursor: pointer;
+  line-height: 1.5;
+}
+
+.location-typeahead-container .suggestions-list li:hover,
+.location-typeahead-container .suggestions-list li:focus {
+  background-color: #f8f8f8;
+}
+
+/* Media query for responsive adjustment */
+@media (max-width: 768px) {
+  .location-typeahead-container input {
+    font-size: 14px;
+    /* Smaller font size on mobile devices */
+    padding: 8px 10px;
+    /* Adjust padding for smaller screens */
+  }
+}

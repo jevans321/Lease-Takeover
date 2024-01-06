@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { fetchListings } from './utility/listingService';
 import DOMPurify from 'dompurify';
+import LocationTypeahead from './LocationTypeahead';
 import './searchBar.css';
 
 interface SearchParams {
@@ -45,11 +46,9 @@ function SearchBar() {
 
   return (
     <form onSubmit={handleSearch} className="search-bar">
-      <input
-        type="text"
-        placeholder="City or ZIP"
+      <LocationTypeahead
         value={location}
-        onChange={(e) => setLocation(e.target.value)}
+        onChange={setLocation}
       />
       <select
         value={propertyType}
