@@ -19,6 +19,9 @@ Chosen for its efficient handling of asynchronous operations, suitable for the p
 ### Express
 Streamlines the creation of web services and APIs, vital for processing lease transactions and user interactions.
 
+### Jest
+JavaScript testing framework used for unit testing and integration testing.
+
 ### Postgres
 Provides robust and reliable data storage, capable of managing complex and relational data structures.
 
