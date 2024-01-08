@@ -1,4 +1,4 @@
-# Web Application for Housing Rental Lease Takeovers
+# Web App for Housing Rental Lease Takeovers
 
 ## App Description
 A platform facilitating the takeover of housing rental leases for tenants seeking early termination. This service connects them with individuals looking for short-term leases, allowing for a smooth transition and lease handover.
@@ -6,7 +6,7 @@ A platform facilitating the takeover of housing rental leases for tenants seekin
 ## Features and Progress
 
 ### Registration
-- [x] **JWT Authentication**
+- **JWT Authentication**: ✅ Complete
 - **Sign-in / Register**: ✅ Complete
 
 ### Search Functionality
