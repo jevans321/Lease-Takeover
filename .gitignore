@@ -19,12 +19,12 @@ server_test.ts
 
 # Client-side
 _v1_files/
-assets/
 App.css
 App.tsx
 index.css
 index.html
 main.tsx
+Readme_HowTo.md
 
 # Editor directories and files
 .vscode/*
