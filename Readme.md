@@ -5,6 +5,26 @@ A platform facilitating the takeover of housing rental leases for tenants seekin
 
 ![](./src/assets/ls_transfer_ui_preview.png)
 
+## Tech Stack Overview
+
+### Typescript
+Adds static typing and manages complexity by catching errors at compile time, enforcing type safety, and improving code readability.
+
+### React.js
+Facilitates the development of a fast, responsive, and user-friendly interface via virtual DOM.
+
+### Node.js
+Chosen for its efficient handling of asynchronous operations, suitable for the platform's real-time updates, as well as being scalabile for future high-volume data exchange.
+
+### Express
+Streamlines the creation of web services and APIs, vital for processing lease transactions and user interactions.
+
+### Postgres
+Provides robust and reliable data storage, capable of managing complex and relational data structures.
+
+### Prisma ORM
+Simplifies database access and manipulation, ensuring smooth data operations for features like lease transfers and tenant matching.
+
 ## Features and Progress
 - **UI**: 🔨 In-Progress
 
@@ -35,24 +55,4 @@ A platform facilitating the takeover of housing rental leases for tenants seekin
 - **Setup Postgres Development Database**: ✅ Complete
 - **Setup Prisma ORM Schema**: ✅ Complete
 - **Setup AWS S3 Image store**:
-
-## Tech Stack Overview
-
-### Typescript
-Adds static typing and manages complexity by catching errors at compile time, enforcing type safety, and improving code readability.
-
-### React.js
-Facilitates the development of a fast, responsive, and user-friendly interface via virtual DOM.
-
-### Node.js
-Chosen for its efficient handling of asynchronous operations, suitable for the platform's real-time updates, as well as being scalabile for future high-volume data exchange.
-
-### Express
-Streamlines the creation of web services and APIs, vital for processing lease transactions and user interactions.
-
-### Postgres
-Provides robust and reliable data storage, capable of managing complex and relational data structures.
-
-### Prisma ORM
-Simplifies database access and manipulation, ensuring smooth data operations for features like lease transfers and tenant matching.
 
