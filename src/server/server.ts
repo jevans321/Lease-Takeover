@@ -1,3 +1,4 @@
+import axios from 'axios';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
@@ -36,6 +37,19 @@ app.get('/bookmarks', handleGetBookmarks);
 app.get('/listings', handleGetListings);
 app.get('/listings/search', handleGetListingsBySearchParameters);
 app.get('/listings/:id', handleGetListingById);
+
+// Proxy endpoint to bypass CORS for Geobytes AutoCompleteCity API. Fetches city suggestions based on user input.
+app.get('/cities', async (req, res) => {
+  try {
+    // Using a free city API from https://geobytes.com/free-ajax-cities-jsonp-api/
+    const URL = `http://gd.geobytes.com/AutoCompleteCity?filter=USCA&template=<geobytes city>, <geobytes code>&q=${req.query.q}`;
+    const response = await axios.get(URL);
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).send('Error fetching cities');
+  }
+});
+
 
 // More routes to be added later...
 
