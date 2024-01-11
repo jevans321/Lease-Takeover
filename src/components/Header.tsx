@@ -1,11 +1,12 @@
 import SearchBar from './SearchBar'; // Make sure the path is correct
 import './header.css'; // Assuming styling is in this file
+import logo_img from "../assets/lease_transfer_logo.png";
 
 function Header() {
   return (
     <header className="header">
       <div className="logo">
-        <a href="/">YourLogo</a>
+        <img src={logo_img} alt="" style={{ width: '40px', height: '40px' }} />
       </div>
       <nav className="navigation">
         <ul>

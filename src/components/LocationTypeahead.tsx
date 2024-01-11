@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './LocationTypeahead.css';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 interface LocationTypeaheadProps {
   value: string;
   onChange: (value: string) => void;
@@ -27,7 +29,6 @@ interface LocationTypeaheadProps {
 const LocationTypeahead: React.FC<LocationTypeaheadProps> = ({ value, onChange }) => {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  // State to keep track of the debounce timeout
   const [debounceTimeout, setDebounceTimeout] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -38,7 +39,12 @@ const LocationTypeahead: React.FC<LocationTypeaheadProps> = ({ value, onChange }
 
     // Set a new timeout with the debounce interval (e.g., 300ms)
     setDebounceTimeout(setTimeout(() => {
-      fetchSuggestions();
+      const sanitizedValue = value.trim().replace(/[^a-zA-Z\s-]/g, '');
+      if (sanitizedValue.length === 0) {
+        setSuggestions([]);
+      } else if (sanitizedValue.length > 2) {
+        fetchSuggestions(sanitizedValue);
+      }
     }, 300)); // 300ms debounce time
 
     // Cleanup function to clear the timeout when the component is unmounted or the value changes
@@ -49,17 +55,9 @@ const LocationTypeahead: React.FC<LocationTypeaheadProps> = ({ value, onChange }
     };
   }, [value]); // Effect runs on every change to 'value'
 
-  const fetchSuggestions = async () => {
-    if (!value) {
-      setSuggestions([]);
-      return;
-    }
-
+  const fetchSuggestions = async (input: string) => {
     try {
-      const response = await axios.get(`/location-suggestions`, {
-        params: { query: value }
-      });
-
+      const response = await axios.get(`${API_BASE_URL}/cities?q=${input}`);
       setSuggestions(response.data);
     } catch (error) {
       console.error('Error fetching location suggestions:', error);
@@ -76,7 +74,7 @@ const LocationTypeahead: React.FC<LocationTypeaheadProps> = ({ value, onChange }
     <div className="location-typeahead-container">
       <input
         type="text"
-        placeholder="City or ZIP"
+        placeholder="City"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         onFocus={() => setShowSuggestions(true)}

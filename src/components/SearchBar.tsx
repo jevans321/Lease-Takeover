@@ -25,7 +25,7 @@ function SearchBar() {
       propertyType: DOMPurify.sanitize(propertyType),
       bedrooms: bedrooms === 'any' ? '' : DOMPurify.sanitize(bedrooms),
     };
-
+    console.log('search params ', searchParams)
     // Validate inputs
     if (!searchParams.location && !searchParams.propertyType && !searchParams.bedrooms) {
       setSearchError('Please enter some search criteria.');

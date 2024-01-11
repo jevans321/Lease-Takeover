@@ -1,5 +1,6 @@
 .location-typeahead-container {
   display: inline-block;
+  position: relative;
   vertical-align: middle;
   /* Aligns vertically with inline or inline-block elements */
 }
@@ -7,10 +8,12 @@
 .location-typeahead-container input {
   height: 16px;
   /* Match the height with other navbar inputs or buttons */
-  padding: 8px 12px;
-  /* Adjust padding as necessary */
-  font-size: 16px;
-  /* Match the font size with other inputs */
+  font-size: 1rem;
+  /* Adjust to match the size of the other navigation text */
+  padding: 0.5rem 1rem;
+  /* Padding to match other navigation items */
+  width: calc(100% - 34px);
+  /* Full width of its container */
   border: 1px solid #ddd;
   /* Border to match other navbar elements */
   border-radius: 4px;
@@ -21,27 +24,34 @@
 
 /* Styles for the suggestions dropdown */
 .location-typeahead-container .suggestions-list {
-  list-style: none;
-  margin: 0;
-  margin-top: 1px;
-  /* Align with the bottom of the input field */
-  padding: 0;
   position: absolute;
-  background-color: white;
-  border: 1px solid #ddd;
-  border-top: none;
-  /* Seamless connection with the input field */
-  border-radius: 0 0 4px 4px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  list-style: none;
+  top: 100%;
+  /* Position directly below the input field */
+  left: 0;
+  width: calc(100% - 2px);
   max-height: 300px;
-  overflow-y: auto;
-  width: 180px;
-  /* Adjust the width to account for borders */
+  /* Subtract border width to align with input field */
+  margin: 0;
+  margin-top: -1px;
+  /* Align perfectly with the input field */
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  /* Shadow as seen in the reference image */
+  border-radius: 0 0 4px 4px;
+  /* Rounded corners at the bottom */
+  border: 1px solid #ddd;
+  border-top: 1px solid transparent;
+  /* Hide the top border */
   z-index: 1000;
+  /* Ensure it's above other content */
+  padding: 0;
+  overflow-y: auto;
 }
 
 .location-typeahead-container .suggestions-list li {
-  padding: 10px 15px;
+  background-color: #fff;
+  padding: 0.5rem 1rem;
   cursor: pointer;
   line-height: 1.5;
 }
