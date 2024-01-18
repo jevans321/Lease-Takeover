@@ -66,6 +66,7 @@ const LocationTypeahead: React.FC<LocationTypeaheadProps> = ({ value, onChange }
   };
 
   const handleSuggestionClick = (suggestion: string) => {
+    console.log('suggestion ', suggestion)
     onChange(suggestion);
     setShowSuggestions(false);
   };
@@ -74,7 +75,7 @@ const LocationTypeahead: React.FC<LocationTypeaheadProps> = ({ value, onChange }
     <div className="location-typeahead-container">
       <input
         type="text"
-        placeholder="City"
+        placeholder="Search city..."
         value={value}
         onChange={(e) => onChange(e.target.value)}
         onFocus={() => setShowSuggestions(true)}
