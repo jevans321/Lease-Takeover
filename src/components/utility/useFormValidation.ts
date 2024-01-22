@@ -6,7 +6,6 @@ export const useFormValidation = () => {
 
   const validateName = (name: string): boolean => {
     // Allows letters, spaces, hyphens, and apostrophes
-    console.log('name: ', name, name.length)
     const re = /^[a-zA-Z\s'-]+$/;
     return re.test(name) && name.trim().length > 0;
   };
