@@ -15,7 +15,7 @@ const PostListing: React.FC = () => {
     lastName: '',
     email: '',
     password: '',
-    userType: 'lessor',
+    userType: 'Lister',
   });
   const [formErrors, setFormErrors] = useState({
     firstNameError: '',

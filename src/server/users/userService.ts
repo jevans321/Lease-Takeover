@@ -11,10 +11,11 @@ export interface User {
   firstName: string;
   lastName: string;
   password: string;
+  userType: string;
 }
 
 export async function registerUser(user: User) {
-  const { email, firstName, lastName, password } = user;
+  const { email, firstName, lastName, password, userType } = user;
   try {
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     const newUser = await prisma.user.create({
@@ -22,7 +23,8 @@ export async function registerUser(user: User) {
         email,
         firstName,   // Optional, can be null
         lastName,    // Optional, can be null
-        password: hashedPassword
+        password: hashedPassword,
+        userType
       }
     });
     const { password: _, ...userData } = newUser;

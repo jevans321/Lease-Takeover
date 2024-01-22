@@ -8,6 +8,7 @@ export const validateRegisterUser = [
   body('password').matches(/[a-z]/).withMessage('Password must contain at least one lowercase letter'),
   body('password').matches(/[0-9]/).withMessage('Password must contain at least one number'),
   body('password').matches(/[^A-Za-z0-9]/).withMessage('Password must contain at least one special character'),
+  body('userType').isIn(['Lister', 'Leasee']).withMessage('Invalid user type'),
   (request: Request, response: Response, next: NextFunction) => {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
