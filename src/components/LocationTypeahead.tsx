@@ -79,7 +79,7 @@ const LocationTypeahead: React.FC<LocationTypeaheadProps> = ({ value, onChange }
         value={value}
         onChange={(e) => onChange(e.target.value)}
         onFocus={() => setShowSuggestions(true)}
-        onBlur={() => setTimeout(() => setShowSuggestions(false), 100)}
+        onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
       />
       {showSuggestions && (
         <ul className="suggestions-list">

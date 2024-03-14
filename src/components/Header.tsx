@@ -1,8 +1,9 @@
+import { HomeProps } from './utility/componentTypes';
 import SearchBar from './SearchBar'; // Make sure the path is correct
 import './header.css'; // Assuming styling is in this file
 import logo_img from "../assets/lease_transfer_logo.png";
 
-function Header() {
+function Header({ onSearch }: HomeProps) {
   return (
     <header className="header">
       <div className="logo">
@@ -16,7 +17,7 @@ function Header() {
           <li><a href="/contact">Contact Us</a></li>
         </ul>
       </nav>
-      <SearchBar />
+      <SearchBar onSearch={onSearch} />
       <div className="user-authentication">
         <a href="/signin">Sign In/Sign Up</a>
       </div>

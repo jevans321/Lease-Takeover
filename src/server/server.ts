@@ -1,7 +1,7 @@
-import axios from 'axios';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
+import { findCitiesBySearchTerm } from './utility/dbQueries';
 import { handleRegisterUser, handleLoginUser } from './users/userController';
 import { handleCreateListing, handleGetListings, handleGetListingById, handleGetListingsBySearchParameters } from './listings/listingController';
 import { handleCreateBookmark, handleGetBookmarks } from './bookmarks/bookmarkController';
@@ -38,20 +38,22 @@ app.get('/listings', handleGetListings);
 app.get('/listings/search', handleGetListingsBySearchParameters);
 app.get('/listings/:id', handleGetListingById);
 
-// Proxy endpoint to bypass CORS for Geobytes AutoCompleteCity API. Fetches city suggestions based on user input.
 app.get('/cities', async (req, res) => {
   try {
-    // Using a free city API from https://geobytes.com/free-ajax-cities-jsonp-api/
-    const URL = `http://gd.geobytes.com/AutoCompleteCity?filter=USCA&template=<geobytes city>, <geobytes code>&q=${req.query.q}`;
-    const response = await axios.get(URL);
-    res.json(response.data);
+    const searchTerm = typeof req.query.q === 'string' ? req.query.q : '';
+    if (!searchTerm) {
+      res.json([]);
+      return;
+    }
+
+    const cities = await findCitiesBySearchTerm(searchTerm);
+    res.json(cities);
   } catch (error) {
+    console.error('Error fetching cities:', error);
     res.status(500).send('Error fetching cities');
   }
 });
 
-
-// More routes to be added later...
 
 app.listen(3000, () => {
   console.log('Server is running at http://localhost:3000');

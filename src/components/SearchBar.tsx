@@ -1,48 +1,68 @@
 import React, { useState } from 'react';
+import { HomeProps } from './utility/componentTypes';
 import { fetchListings } from './utility/listingService';
+import { useNavigate } from 'react-router-dom';
 import DOMPurify from 'dompurify';
 import LocationTypeahead from './LocationTypeahead';
 import './searchBar.css';
 
-interface SearchParams {
-  location: string;
-  propertyType: string;
-  bedrooms: string;
-}
-
-function SearchBar() {
+function SearchBar({ onSearch }: HomeProps) {
   const [bedrooms, setBedrooms] = useState('');
   const [location, setLocation] = useState('');
   const [propertyType, setPropertyType] = useState('');
   const [searchError, setSearchError] = useState('');
+  const navigate = useNavigate();
 
-  const handleSearch = async (event: React.FormEvent) => {
+  const handleSearch = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setSearchError('');
-    // Sanitize inputs
-    const searchParams: SearchParams = {
-      location: DOMPurify.sanitize(location),
-      propertyType: DOMPurify.sanitize(propertyType),
+    // Split the location into parts, then try to identify city and state
+    let parts = location.includes(',')
+      ? location.split(',').map(part => part.trim())
+      : location.split(' ').map(part => part.trim());
+
+    let sanitizedCity, sanitizedState;
+    if (parts.length > 1 && location.includes(',')) {
+      // Case for "City, State"
+      [sanitizedCity, sanitizedState] = parts;
+    } else if (parts.length >= 2 && !location.includes(',')) {
+      // Case for "City State" with city names possibly having multiple words
+      sanitizedState = parts.pop() || ''; // Assumes last part is the state
+      sanitizedCity = parts.join(' '); // The rest is considered as the city
+    } else {
+      // Single word, assume it's just the city or the user input is incomplete
+      sanitizedCity = parts[0] || '';
+      sanitizedState = ''; // No state information provided
+    }
+
+    // Further sanitization for security
+    sanitizedCity = DOMPurify.sanitize(sanitizedCity);
+    sanitizedState = DOMPurify.sanitize(sanitizedState);
+
+    if (!sanitizedCity) {
+      setSearchError('Please enter a city.');
+      return;
+    }
+    const searchParams = {
       bedrooms: bedrooms === 'any' ? '' : DOMPurify.sanitize(bedrooms),
+      city: sanitizedCity,
+      propertyType: DOMPurify.sanitize(propertyType),
+      state: sanitizedState,
     };
-    console.log('search params ', searchParams)
-    // Validate inputs
-    if (!searchParams.location && !searchParams.propertyType && !searchParams.bedrooms) {
+    if (!searchParams.city || !searchParams.state) {
       setSearchError('Please enter some search criteria.');
       return;
     }
-
     try {
-      // Proceed with the API call
       const listings = await fetchListings(searchParams);
       // Do something with the listings, like updating state or navigating to a results page
-      console.log(listings);
-    } catch (error) {
-      // Handle errors, such as displaying a user-friendly error message
+      onSearch(listings); // Update App's state
+      navigate('/listings'); // Navigate to the listings page
+    } catch (error: any) { // Typing error as 'any' due to TypeScript
       console.error('Search failed:', error);
+      setSearchError('Search failed due to an unexpected error. Please try again.');
     }
   };
-
 
   return (
     <form onSubmit={handleSearch} className="search-bar">
