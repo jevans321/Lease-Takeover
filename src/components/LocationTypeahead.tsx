@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { LocationTypeaheadProps } from './utility/componentTypes';
 import axios from 'axios';
 import './LocationTypeahead.css';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-interface LocationTypeaheadProps {
-  value: string;
-  onChange: (value: string) => void;
-}
 /**
  * Debouncing in the LocationTypeahead Component:
  *
@@ -26,7 +23,7 @@ interface LocationTypeaheadProps {
  * - This approach significantly reduces the number of API calls, improving the efficiency and performance
  *   of the component, and offering a smoother user experience.
  */
-const LocationTypeahead: React.FC<LocationTypeaheadProps> = ({ value, onChange }) => {
+const LocationTypeahead: React.FC<LocationTypeaheadProps> = ({ value, onChange, onValidSelectionMade }) => {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [debounceTimeout, setDebounceTimeout] = useState<NodeJS.Timeout | null>(null);
@@ -39,11 +36,17 @@ const LocationTypeahead: React.FC<LocationTypeaheadProps> = ({ value, onChange }
 
     // Set a new timeout with the debounce interval (e.g., 300ms)
     setDebounceTimeout(setTimeout(() => {
-      const sanitizedValue = value.trim().replace(/[^a-zA-Z\s-]/g, '');
-      if (sanitizedValue.length === 0) {
-        setSuggestions([]);
-      } else if (sanitizedValue.length > 2) {
+      // Remove unwanted characters, allow alphanumeric, spaces, and a single comma
+      // Ensure only one comma exists and it is placed properly
+      const parts = value.trim().split(',').map(part => part.trim());
+      const sanitizedCity = parts[0].replace(/[^a-zA-Z\s]/g, '').replace(/\s+/g, ' ');
+      const sanitizedState = parts.length > 1 ? parts[1].replace(/[^a-zA-Z\s]/g, '').replace(/\s+/g, ' ') : '';
+      const sanitizedValue = parts.length > 1 ? `${sanitizedCity}, ${sanitizedState}` : sanitizedCity;
+
+      if (sanitizedValue.length > 2) {
         fetchSuggestions(sanitizedValue);
+      } else {
+        setSuggestions([]);
       }
     }, 300)); // 300ms debounce time
 
@@ -65,9 +68,15 @@ const LocationTypeahead: React.FC<LocationTypeaheadProps> = ({ value, onChange }
     }
   };
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onChange(e.target.value);
+    onValidSelectionMade(false);
+  };
+
   const handleSuggestionClick = (suggestion: string) => {
     console.log('suggestion ', suggestion)
     onChange(suggestion);
+    onValidSelectionMade(true);
     setShowSuggestions(false);
   };
 
@@ -77,7 +86,7 @@ const LocationTypeahead: React.FC<LocationTypeaheadProps> = ({ value, onChange }
         type="text"
         placeholder="Search city..."
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={handleInputChange}
         onFocus={() => setShowSuggestions(true)}
         onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
       />

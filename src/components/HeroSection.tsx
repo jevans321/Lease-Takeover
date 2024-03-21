@@ -1,11 +1,10 @@
-import DOMPurify from 'dompurify';
 import React, { useState } from 'react';
 import Slider from 'react-slick';
 import LocationTypeahead from './LocationTypeahead';
 import { HomeProps } from './utility/componentTypes';
 import { fetchListings } from './utility/listingService';
+import { getSanitizedCityState } from './utility/helpers';
 import { useNavigate } from 'react-router-dom';
-
 import './heroSection.css';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -14,6 +13,7 @@ import slide1 from '../assets/jGggmwPHncRNy6B5BTvipD_v3.jpg';
 import slide2 from '../assets/modern-apartment-design-hidden-lighting-111019-1249-01-800x408.jpg';
 
 function HeroSection({ onSearch }: HomeProps) {
+  const [isLocationValid, setIsLocationValid] = useState(false);
   const [location, setLocation] = useState('');
   const [searchError, setSearchError] = useState('');
   const navigate = useNavigate();
@@ -21,35 +21,16 @@ function HeroSection({ onSearch }: HomeProps) {
   const handleSearch = async (event: React.FormEvent) => {
     event.preventDefault();
     setSearchError('');
-
-    // Split the location into parts, then try to identify city and state
-    let parts = location.includes(',')
-      ? location.split(',').map(part => part.trim())
-      : location.split(' ').map(part => part.trim());
-
-    let sanitizedCity, sanitizedState;
-    if (parts.length > 1 && location.includes(',')) {
-      // Case for "City, State"
-      [sanitizedCity, sanitizedState] = parts;
-    } else if (parts.length >= 2 && !location.includes(',')) {
-      // Case for "City State" with city names possibly having multiple words
-      sanitizedState = parts.pop() || ''; // Assumes last part is the state
-      sanitizedCity = parts.join(' '); // The rest is considered as the city
-    } else {
-      // Single word, assume it's just the city or the user input is incomplete
-      sanitizedCity = parts[0] || '';
-      sanitizedState = ''; // No state information provided
+    if (!isLocationValid) {
+      setSearchError('Please select a location from the dropdown.');
+      return;
     }
-
-    // Further sanitization for security
-    sanitizedCity = DOMPurify.sanitize(sanitizedCity);
-    sanitizedState = DOMPurify.sanitize(sanitizedState);
+    const [sanitizedCity, sanitizedState] = getSanitizedCityState(location);
 
     if (!sanitizedCity) {
       setSearchError('Please enter a city.');
       return;
     }
-
     try {
       // Proceed with the API call
       const listings = await fetchListings({ city: sanitizedCity, state: sanitizedState });
@@ -94,6 +75,7 @@ function HeroSection({ onSearch }: HomeProps) {
           <LocationTypeahead
             value={location}
             onChange={setLocation}
+            onValidSelectionMade={setIsLocationValid}
           />
           <button type="submit">
             <img src={searchIcon} alt="Search" />

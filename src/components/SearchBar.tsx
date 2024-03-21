@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { HomeProps } from './utility/componentTypes';
 import { fetchListings } from './utility/listingService';
+import { getSanitizedCityState } from './utility/helpers';
 import { useNavigate } from 'react-router-dom';
 import DOMPurify from 'dompurify';
 import LocationTypeahead from './LocationTypeahead';
@@ -8,6 +9,7 @@ import './searchBar.css';
 
 function SearchBar({ onSearch }: HomeProps) {
   const [bedrooms, setBedrooms] = useState('');
+  const [isLocationValid, setIsLocationValid] = useState(false);
   const [location, setLocation] = useState('');
   const [propertyType, setPropertyType] = useState('');
   const [searchError, setSearchError] = useState('');
@@ -16,37 +18,27 @@ function SearchBar({ onSearch }: HomeProps) {
   const handleSearch = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setSearchError('');
-    // Split the location into parts, then try to identify city and state
-    let parts = location.includes(',')
-      ? location.split(',').map(part => part.trim())
-      : location.split(' ').map(part => part.trim());
-
-    let sanitizedCity, sanitizedState;
-    if (parts.length > 1 && location.includes(',')) {
-      // Case for "City, State"
-      [sanitizedCity, sanitizedState] = parts;
-    } else if (parts.length >= 2 && !location.includes(',')) {
-      // Case for "City State" with city names possibly having multiple words
-      sanitizedState = parts.pop() || ''; // Assumes last part is the state
-      sanitizedCity = parts.join(' '); // The rest is considered as the city
-    } else {
-      // Single word, assume it's just the city or the user input is incomplete
-      sanitizedCity = parts[0] || '';
-      sanitizedState = ''; // No state information provided
+    if (!isLocationValid) {
+      setSearchError('Please select a location from the dropdown.');
+      return;
     }
-
-    // Further sanitization for security
-    sanitizedCity = DOMPurify.sanitize(sanitizedCity);
-    sanitizedState = DOMPurify.sanitize(sanitizedState);
+    const [sanitizedCity, sanitizedState] = getSanitizedCityState(location);
 
     if (!sanitizedCity) {
       setSearchError('Please enter a city.');
       return;
     }
+
+    const validBedrooms = /^[0-9]+$/.test(bedrooms);
+    const sanitizedBedrooms = bedrooms === 'any' || validBedrooms ? bedrooms : '';
+
+    const validPropertyType = /^[a-zA-Z\s]+$/.test(propertyType);
+    const sanitizedPropertyType = validPropertyType ? propertyType : '';
+
     const searchParams = {
-      bedrooms: bedrooms === 'any' ? '' : DOMPurify.sanitize(bedrooms),
+      bedrooms: sanitizedBedrooms,
       city: sanitizedCity,
-      propertyType: DOMPurify.sanitize(propertyType),
+      propertyType: sanitizedPropertyType,
       state: sanitizedState,
     };
     if (!searchParams.city || !searchParams.state) {
@@ -69,6 +61,7 @@ function SearchBar({ onSearch }: HomeProps) {
       <LocationTypeahead
         value={location}
         onChange={setLocation}
+        onValidSelectionMade={setIsLocationValid}
       />
       <select
         value={propertyType}
